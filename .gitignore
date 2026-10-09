@@ -1,0 +1,19 @@
+# Environment variables and secrets (NEVER commit API keys!)
+.env
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE & OS settings
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

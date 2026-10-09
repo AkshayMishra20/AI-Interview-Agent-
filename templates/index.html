@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InterviewAI - AI-Powered Interview Preparation Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="app-layout">
+  <!-- Left Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-badge">
+        <span class="brand-sparkle">✦</span> AI
+      </div>
+      <div class="brand-text">
+        <strong>InterviewAI</strong>
+        <span>Autonomous Interviewer</span>
+      </div>
+    </div>
+
+    <nav class="nav-menu">
+      <button class="nav-item active" data-view="dashboard">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-label">Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="interview">
+        <span class="nav-icon">◉</span>
+        <span class="nav-label">Live Interview</span>
+        <span class="live-indicator">LIVE</span>
+      </button>
+      <button class="nav-item" data-view="domains">
+        <span class="nav-icon">▦</span>
+        <span class="nav-label">Question Domains</span>
+      </button>
+      <button class="nav-item" data-view="report">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Scorecard & Roadmap</span>
+      </button>
+    </nav>
+
+    <!-- Model Status Card in Sidebar -->
+    <div class="sidebar-model-card">
+      <div class="smc-header">
+        <span class="smc-dot"></span>
+        <span class="smc-title" id="sideModelProvider">AI ENGINE ACTIVE</span>
+      </div>
+      <div class="smc-model-name" id="sideModelName">Google Gemini 2.5 Flash</div>
+      <p class="smc-desc">Real-time deep response evaluation & dynamic question synthesis.</p>
+      <button class="smc-btn" id="openSettingsBtn">⚙️ AI Model Settings</button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="credits">
+        <span>AI Interview Assistant</span>
+        <small>Powered by Gemini & LLM Engine</small>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Navigation">☰</button>
+        <div class="current-session-info">
+          <span class="role-pill" id="topbarRole">Software Engineer</span>
+          <span class="divider">•</span>
+          <span class="domain-pill" id="topbarDomain">AI & Machine Learning</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <!-- Voice Toggle -->
+        <button class="action-pill-btn" id="voiceToggleBtn" title="Toggle AI Voice Reading">
+          <span id="voiceIcon">🔊</span>
+          <span id="voiceText">AI Voice On</span>
+        </button>
+
+        <!-- AI Model Status Pill -->
+        <div class="model-pill" id="topbarModelPill" title="Click to configure AI Model">
+          <span class="pulse-indicator"></span>
+          <span id="topbarModelLabel">Gemini 2.5 Flash</span>
+        </div>
+
+        <button class="primary-pill-btn" id="topSettingsBtn">⚙️ Settings</button>
+      </div>
+    </header>
+
+    <!-- VIEW 1: DASHBOARD -->
+    <section id="dashboard" class="view active">
+      <div class="hero-banner">
+        <div class="hero-content">
+          <span class="hero-badge">✦ NEXT-GEN AI MOCK INTERVIEWER</span>
+          <h1>Prepare Smarter.<br><span class="gradient-text">Interview With Confidence.</span></h1>
+          <p>
+            Experience realistic technical and behavioral interviews powered by real AI models. 
+            Get instant multi-criteria grading, missing concepts analysis, ideal model answers, and dynamic follow-up questions.
+          </p>
+          <div class="hero-cta-group">
+            <button class="primary-btn hero-btn" id="heroStartBtn">
+              Start Practice Interview <span>→</span>
+            </button>
+            <button class="secondary-btn" id="heroConfigBtn">
+              ⚙️ Configure AI Model
+            </button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="bot-card">
+            <div class="bot-avatar">
+              <div class="bot-ring"></div>
+              <div class="bot-inner">🤖</div>
+            </div>
+            <div class="bot-status-text">
+              <strong>AI Interviewer Ready</strong>
+              <span>Adaptive Difficulty Engine</span>
+            </div>
+            <div class="bot-metrics">
+              <div class="metric-chip">✓ Multi-Factor Rubric</div>
+              <div class="metric-chip">🎙️ Voice Enabled</div>
+              <div class="metric-chip">⚡ Instant Feedback</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Setup Presets -->
+      <div class="section-title">
+        <div>
+          <h2>Choose Your Track</h2>
+          <p>Jump right into industry-curated interview drills.</p>
+        </div>
+      </div>
+      <div class="tracks-grid" id="dashboardTracksGrid">
+        <!-- Populated via JS -->
+      </div>
+
+      <!-- Feature Highlights -->
+      <div class="features-row">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Dynamic AI Generation</h3>
+          <p>Never memorize answers. The AI synthesizes unique, context-aware questions tailored to your experience and role.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📐</div>
+          <h3>4-Pillar Evaluation Rubric</h3>
+          <p>Scored across Technical Accuracy (35%), Relevance (25%), Problem Solving (20%), and Communication (20%).</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💡</div>
+          <h3>Model Answers & Follow-ups</h3>
+          <p>See how a senior tech lead would answer each question, plus handle adaptive follow-up challenges.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎙️</div>
+          <h3>Voice Speech & Dictation</h3>
+          <p>Listen to questions with AI Speech Synthesis and practice speaking aloud with real-time Speech-to-Text.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: LIVE INTERVIEW ROOM -->
+    <section id="interview" class="view">
+      <div class="interview-header-bar">
+        <div class="ih-left">
+          <span class="badge-tag" id="domainBadge">ARTIFICIAL INTELLIGENCE</span>
+          <span class="badge-tag sub" id="difficultyBadge">MEDIUM</span>
+          <span class="badge-tag type" id="typeBadge">CONCEPTUAL</span>
+        </div>
+        <div class="ih-center">
+          <div class="question-tracker">
+            Question <span id="qCurrent">1</span> of <span id="qTotal">5</span>
+          </div>
+        </div>
+        <div class="ih-right">
+          <!-- Countdown Timer -->
+          <div class="timer-badge" id="timerBadge" title="Question countdown">
+            <span class="timer-icon">⏱</span>
+            <span id="timerText">02:30</span>
+            <button class="timer-toggle-btn" id="timerToggleBtn" title="Pause/Play timer">⏸</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="interview-grid">
+        <!-- Main Interview Area -->
+        <div class="interview-stage">
+          <!-- AI Interviewer Question Box -->
+          <div class="card interviewer-card">
+            <div class="interviewer-header">
+              <div class="avatar-speaker">
+                <div class="interviewer-avatar">🤖</div>
+                <div class="speaking-waves" id="speakingWaves">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="interviewer-info">
+                <h4>AI Lead Interviewer</h4>
+                <span class="status-live">● Asking question</span>
+              </div>
+              <div class="speech-controls">
+                <button class="btn-icon" id="speakQuestionBtn" title="Read Question Aloud">
+                  🔊 Read Aloud
+                </button>
+              </div>
+            </div>
+
+            <div class="question-display">
+              <h2 id="questionText">Loading interview question from AI Model...</h2>
+            </div>
+
+            <!-- Hints / Context Accordion -->
+            <div class="question-hints-box" id="hintsBox">
+              <button class="hint-toggle-btn" id="hintToggleBtn">
+                <span>💡 Question Hints & Key Focus Areas</span>
+                <span id="hintArrow">▼</span>
+              </button>
+              <div class="hint-content hidden" id="hintContent">
+                <p id="hintText">Think about core definitions, structural trade-offs, and practical industry applications.</p>
+                <div class="key-points-tags" id="expectedPointsTags"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Candidate Answer Box -->
+          <div class="card answer-card">
+            <div class="answer-header">
+              <div class="ah-left">
+                <h3>Your Response</h3>
+                <span class="star-tip">💡 Tip: Use the <strong>STAR</strong> method for behavioral & structured examples for tech questions.</span>
+              </div>
+              <div class="ah-right">
+                <!-- Mic / Dictation Button -->
+                <button class="btn-mic" id="micBtn" title="Speak your answer with microphone">
+                  <span class="mic-icon">🎙️</span>
+                  <span id="micLabel">Voice Dictation</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="textarea-wrapper">
+              <textarea 
+                id="answerInput" 
+                placeholder="Type your response here, or click 'Voice Dictation' to speak aloud... Explain the concept, why it matters, and provide a concrete real-world example."
+                rows="8"
+              ></textarea>
+              <div class="textarea-footer">
+                <div class="word-counter">
+                  <span id="wordCount">0</span> words • <span id="charCount">0</span> characters
+                </div>
+                <div class="answer-status" id="answerStatus">Drafting answer...</div>
+              </div>
+            </div>
+
+            <div class="answer-actions">
+              <button class="secondary-btn" id="skipQuestionBtn">Skip Question</button>
+              <button class="primary-btn submit-btn" id="submitAnswerBtn">
+                <span id="submitBtnText">Submit for AI Evaluation →</span>
+                <span class="spinner hidden" id="evalSpinner"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic AI Evaluation Result Panel -->
+          <div class="card eval-result-card hidden" id="evaluationCard">
+            <div class="eval-header">
+              <div class="eval-title">
+                <span class="badge-ai">✦ AI EVALUATION & FEEDBACK</span>
+                <h3>Score & Detailed Analysis</h3>
+                <small id="evalEngineSource">Evaluated by Google Gemini Model</small>
+              </div>
+              <div class="score-radial-box">
+                <div class="overall-score-num" id="evalOverallScore">8.5</div>
+                <div class="score-denom">/ 10.0</div>
+              </div>
+            </div>
+
+            <!-- 4-Pillar Score Bars -->
+            <div class="criteria-bars-grid">
+              <div class="crit-bar-item">
+                <div class="cbi-head">
+                  <span>Technical Accuracy</span>
+                  <strong id="scoreAccuracy">0/10</strong>
+                </div>
+                <div class="cbi-track"><div class="cbi-fill" id="barAccuracy"></div></div>
+              </div>
+              <div class="crit-bar-item">
+                <div class="cbi-head">
+                  <span>Relevance & Completeness</span>
+                  <strong id="scoreRelevance">0/10</strong>
+                </div>
+                <div class="cbi-track"><div class="cbi-fill" id="barRelevance"></div></div>
+              </div>
+              <div class="crit-bar-item">
+                <div class="cbi-head">
+                  <span>Technical Problem Solving</span>
+                  <strong id="scoreTechDepth">0/10</strong>
+                </div>
+                <div class="cbi-track"><div class="cbi-fill" id="barTechDepth"></div></div>
+              </div>
+              <div class="crit-bar-item">
+                <div class="cbi-head">
+                  <span>Communication & Structure</span>
+                  <strong id="scoreCommunication">0/10</strong>
+                </div>
+                <div class="cbi-track"><div class="cbi-fill" id="barCommunication"></div></div>
+              </div>
+            </div>
+
+            <!-- Qualitative Feedback Box -->
+            <div class="eval-feedback-box">
+              <h4>Interviewer Commentary:</h4>
+              <p id="evalFeedbackText">Strong response with solid technical foundation.</p>
+            </div>
+
+            <!-- Strengths & Improvements Grid -->
+            <div class="analysis-split">
+              <div class="analysis-col strengths-col">
+                <h4>✓ Key Strengths</h4>
+                <ul id="evalStrengthsList"></ul>
+              </div>
+              <div class="analysis-col improvements-col">
+                <h4>▲ Areas For Growth</h4>
+                <ul id="evalImprovementsList"></ul>
+              </div>
+            </div>
+
+            <!-- Missing Concepts Tags -->
+            <div class="missing-concepts-box" id="missingConceptsBox">
+              <h4>🔍 Missing Key Concepts to Mention:</h4>
+              <div class="tags-container" id="missingConceptsTags"></div>
+            </div>
+
+            <!-- Collapsible Ideal / Model Answer -->
+            <div class="ideal-answer-box">
+              <button class="ideal-toggle-btn" id="idealToggleBtn">
+                <span>📖 View Ideal / Model Answer (Expert Formulation)</span>
+                <span id="idealArrow">▼</span>
+              </button>
+              <div class="ideal-content hidden" id="idealContent">
+                <p id="idealAnswerText">Loading model answer...</p>
+              </div>
+            </div>
+
+            <!-- Dynamic Follow-Up Challenge -->
+            <div class="follow-up-card hidden" id="followUpCard">
+              <div class="fu-header">
+                <span class="fu-icon">⚡</span>
+                <div>
+                  <strong>Interviewer Follow-Up Question:</strong>
+                  <p id="followUpText">How would your proposed solution scale if traffic increases 100x?</p>
+                </div>
+              </div>
+              <div class="fu-input-row">
+                <input type="text" id="followUpInput" placeholder="Answer the follow-up question for bonus points...">
+                <button class="secondary-btn" id="submitFollowUpBtn">Answer Follow-Up</button>
+              </div>
+              <div class="fu-feedback hidden" id="followUpFeedback"></div>
+            </div>
+
+            <!-- Post-Evaluation Buttons -->
+            <div class="eval-footer-actions">
+              <button class="secondary-btn" id="retryAnswerBtn">↺ Refine & Retry</button>
+              <button class="primary-btn" id="nextQuestionBtn">Next Question →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Interview Session Settings Drawer -->
+        <aside class="interview-sidebar">
+          <div class="card setup-card">
+            <h3>Interview Setup</h3>
+            
+            <div class="form-group">
+              <label for="candidateNameInput">Candidate Name</label>
+              <input type="text" id="candidateNameInput" value="Candidate" placeholder="Your Name">
+            </div>
+
+            <div class="form-group">
+              <label for="domainSelect">Target Domain</label>
+              <select id="domainSelect"></select>
+            </div>
+
+            <div class="form-group">
+              <label for="jobRoleInput">Target Job Role</label>
+              <input type="text" id="jobRoleInput" value="Software Engineer" placeholder="e.g. Full Stack Developer, ML Engineer">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="experienceLevelSelect">Level</label>
+                <select id="experienceLevelSelect">
+                  <option value="Fresher / Junior">Junior</option>
+                  <option value="Mid-Level (2-4 yrs)" selected>Mid-Level</option>
+                  <option value="Senior (5+ yrs)">Senior</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="difficultySelect">Difficulty</label>
+                <select id="difficultySelect">
+                  <option value="Easy">Easy</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="sessionSizeSelect">Questions</label>
+                <select id="sessionSizeSelect">
+                  <option value="3">3 Questions</option>
+                  <option value="5" selected>5 Questions</option>
+                  <option value="10">10 Questions</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="timerSettingSelect">Timer</label>
+                <select id="timerSettingSelect">
+                  <option value="150" selected>2.5 Mins</option>
+                  <option value="120">2 Mins</option>
+                  <option value="300">5 Mins</option>
+                  <option value="0">Untimed</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="outline-btn w-100" id="restartSessionBtn">
+              ↻ Start Fresh Session
+            </button>
+
+            <!-- Rubric Weighting Card -->
+            <div class="rubric-summary">
+              <h4>Scoring Weight Breakdown</h4>
+              <div class="rubric-row"><span>Accuracy & Depth</span><b>35%</b></div>
+              <div class="rubric-row"><span>Relevance</span><b>25%</b></div>
+              <div class="rubric-row"><span>Problem Solving</span><b>20%</b></div>
+              <div class="rubric-row"><span>Communication</span><b>20%</b></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- VIEW 3: DOMAINS & QUESTION BANK -->
+    <section id="domains" class="view">
+      <div class="section-title">
+        <div>
+          <span class="hero-badge">CURATED TRACKS</span>
+          <h2>Interview Domains & Specializations</h2>
+          <p>Choose an area of engineering or business to hone your responses.</p>
+        </div>
+      </div>
+      <div class="domains-grid" id="fullDomainsGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 4: PERFORMANCE REPORT & ROADMAP -->
+    <section id="report" class="view">
+      <div class="report-header-banner">
+        <div>
+          <span class="hero-badge">SESSION REPORT</span>
+          <h2>Performance Scorecard & Preparation Roadmap</h2>
+          <p>Comprehensive AI evaluation of your interview readiness.</p>
+        </div>
+        <div class="report-actions">
+          <button class="secondary-btn" id="printReportBtn">🖨️ Print / Save PDF</button>
+          <button class="primary-btn" id="reportNewSessionBtn">Start New Interview</button>
+        </div>
+      </div>
+
+      <!-- Scorecard Header Grid -->
+      <div class="report-hero-grid">
+        <div class="card verdict-card">
+          <span class="verdict-label">HIRING VERDICT</span>
+          <div class="verdict-title" id="reportVerdict">Strong Hire 🌟</div>
+          <div class="overall-report-score">
+            <span class="score-large" id="reportAvgScore">8.4</span>
+            <span class="score-unit">/ 10</span>
+          </div>
+          <p class="verdict-desc" id="reportStatusDesc">Outstanding technical performance.</p>
+        </div>
+
+        <div class="card criteria-report-card">
+          <h3>Skill Metrics Breakdown</h3>
+          <div class="crit-report-bars">
+            <div class="crb-item">
+              <div class="crb-labels"><span>Accuracy & Depth</span><strong id="repAcc">8.5/10</strong></div>
+              <div class="crb-track"><div class="crb-fill" id="repAccBar"></div></div>
+            </div>
+            <div class="crb-item">
+              <div class="crb-labels"><span>Relevance & Completeness</span><strong id="repRel">8.0/10</strong></div>
+              <div class="crb-track"><div class="crb-fill" id="repRelBar"></div></div>
+            </div>
+            <div class="crb-item">
+              <div class="crb-labels"><span>Problem Solving</span><strong id="repTech">8.2/10</strong></div>
+              <div class="crb-track"><div class="crb-fill" id="repTechBar"></div></div>
+            </div>
+            <div class="crb-item">
+              <div class="crb-labels"><span>Communication & Structure</span><strong id="repComm">9.0/10</strong></div>
+              <div class="crb-track"><div class="crb-fill" id="repCommBar"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Executive Summary -->
+      <div class="card summary-card">
+        <h3>AI Executive Debrief</h3>
+        <p id="reportExecSummary">Analyzing session results...</p>
+        <div class="summary-points-grid">
+          <div class="sp-col">
+            <h4>✓ Standout Strengths</h4>
+            <ul id="reportStrengthsList"></ul>
+          </div>
+          <div class="sp-col">
+            <h4>▲ Primary Blindspots</h4>
+            <ul id="reportGapsList"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personalized Preparation Roadmap -->
+      <div class="card roadmap-card">
+        <h3>Customized AI Preparation Roadmap</h3>
+        <p>Recommended 3-step action plan to reach the top 5% of candidates:</p>
+        <div class="roadmap-steps" id="reportRoadmapSteps"></div>
+      </div>
+
+      <!-- Question by Question History Log -->
+      <div class="card history-card">
+        <h3>Question-by-Question Detailed Log</h3>
+        <div class="history-list" id="reportHistoryList">
+          <p class="empty-state">No questions completed yet in this session.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- AI MODEL CONFIGURATION MODAL -->
+<div class="modal-overlay hidden" id="configModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span class="modal-icon">⚙️</span>
+        <h3>AI Model Configuration</h3>
+      </div>
+      <button class="modal-close" id="closeModalBtn">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-subtitle">
+        Configure your preferred AI model. You can use <strong>Google Gemini (Free tier available)</strong>, 
+        OpenAI, Groq (Ultra-fast), or the built-in Offline Smart Heuristic engine.
+      </p>
+
+      <div class="form-group">
+        <label for="aiProviderSelect">Active AI Provider</label>
+        <select id="aiProviderSelect">
+          <option value="gemini">Google Gemini (Recommended - Free Tier)</option>
+          <option value="openai">OpenAI (GPT-4o-mini / GPT-4)</option>
+          <option value="groq">Groq Cloud (Llama 3.3 70B - Ultra Fast)</option>
+          <option value="offline">Offline Smart Heuristic Mode (No API Key Required)</option>
+        </select>
+      </div>
+
+      <!-- Gemini Settings -->
+      <div class="provider-fields" id="geminiFields">
+        <div class="form-group">
+          <label for="geminiApiKeyInput">
+            Gemini API Key
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="field-link">Get Free API Key ↗</a>
+          </label>
+          <div class="input-password-wrapper">
+            <input type="password" id="geminiApiKeyInput" placeholder="Paste AIzaSy... key here">
+            <button type="button" class="toggle-pw-btn" data-target="geminiApiKeyInput">👁</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="geminiModelSelect">Gemini Model</label>
+          <select id="geminiModelSelect">
+            <option value="gemini-2.5-flash" selected>gemini-2.5-flash (Fast & Accurate)</option>
+            <option value="gemini-2.0-flash">gemini-2.0-flash (Next-Gen)</option>
+            <option value="gemini-1.5-flash">gemini-1.5-flash (Standard)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- OpenAI Settings -->
+      <div class="provider-fields hidden" id="openaiFields">
+        <div class="form-group">
+          <label for="openaiApiKeyInput">
+            OpenAI API Key
+            <a href="https://platform.openai.com/api-keys" target="_blank" class="field-link">Get OpenAI Key ↗</a>
+          </label>
+          <div class="input-password-wrapper">
+            <input type="password" id="openaiApiKeyInput" placeholder="sk-...">
+            <button type="button" class="toggle-pw-btn" data-target="openaiApiKeyInput">👁</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="openaiModelSelect">OpenAI Model</label>
+          <select id="openaiModelSelect">
+            <option value="gpt-4o-mini" selected>gpt-4o-mini (Cost-effective & smart)</option>
+            <option value="gpt-4o">gpt-4o (State of the art)</option>
+            <option value="gpt-3.5-turbo">gpt-3.5-turbo (Legacy)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Groq Settings -->
+      <div class="provider-fields hidden" id="groqFields">
+        <div class="form-group">
+          <label for="groqApiKeyInput">
+            Groq API Key
+            <a href="https://console.groq.com/keys" target="_blank" class="field-link">Get Free Groq Key ↗</a>
+          </label>
+          <div class="input-password-wrapper">
+            <input type="password" id="groqApiKeyInput" placeholder="gsk_...">
+            <button type="button" class="toggle-pw-btn" data-target="groqApiKeyInput">👁</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="groqModelSelect">Groq Model</label>
+          <select id="groqModelSelect">
+            <option value="llama-3.3-70b-versatile" selected>llama-3.3-70b-versatile</option>
+            <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (Fastest)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Offline Info Box -->
+      <div class="provider-fields hidden" id="offlineFields">
+        <div class="offline-callout">
+          <strong>📦 Offline Smart Mode Active</strong>
+          <p>
+            Uses the built-in curated question repository, keyword semantic analyzer, 
+            and pre-crafted expert model answers. Works completely offline without any internet API call!
+          </p>
+        </div>
+      </div>
+
+      <!-- Test Connection Result -->
+      <div class="test-result-box hidden" id="testResultBox"></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="secondary-btn" id="testConnectionBtn">⚡ Test Connection</button>
+      <button class="primary-btn" id="saveConfigBtn">Save & Apply Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
